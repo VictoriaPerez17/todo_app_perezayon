@@ -32,6 +32,7 @@ def list_index():
                            + "<td>" + task["description"] + "</td>" \
                            + "<td>" + task["status"] + "</td>" \
                             + "<td>" +  str(task["timestamp"]) + "</td>" \
+                            + "<td>" +  str(task["priority"]) + "</td>" \
                             + "</tr>"
                                 )
         return render_template("taskList.html", rows = tasks_rows)
@@ -66,13 +67,11 @@ def edit_index():
         return render_template("editTask.html",task_info = task_info)
     
     if request.method == "POST":
-        print("function entered")
         if not utils.check_required_params(request.form):
             flash("No se proporciono al menos un dato requerido (titulo y fecha limite de tarea)","error")
             return redirect(url_for("edit_index",taskToEdit=request.form['taskID']))
             
         task_data = utils.get_form_inputs(request)
-        print("task data gotten")
 
         try:
             utils.edit_task(task_data)

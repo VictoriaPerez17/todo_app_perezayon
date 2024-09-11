@@ -102,6 +102,11 @@
                     Título de tarea<input type="text" name="taskTitle" placeholder="Requerido" value="{{task_info['current_name']}}">
                     Descripción de tarea<textarea name="taskDescription">{{task_info['current_description']}}</textarea>
                     Fecha límite<input type="datetime-local" name="taskTS" value="{{task_info['current_ts']}}">
+                    Prioridad<select name="priority" selected="2">
+                        <option value="1">Baja</option>
+                        <option value="2">Media</option>
+                        <option value="3">Alta</option>
+                    </select>
                     <button>Guardar cambios</button>
                 </form>
             </article>
