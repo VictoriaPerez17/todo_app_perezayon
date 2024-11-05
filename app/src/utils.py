@@ -29,7 +29,10 @@ def get_current_user_id(username):
 
 def create_user(form):
     if "username" not in form or "password" not in form:
-        raise Exception("Por favor, proporcione tanto un usuario un usuario y una contraseña")
+        raise Exception("Por favor, proporcione un usuario y una contraseña")
+    
+    if form["username"] == "" or form["password"] == "":
+        raise Exception("Por favor, proporcione un usuario y una contraseña no vacios")
 
     session = Session()
     try:
