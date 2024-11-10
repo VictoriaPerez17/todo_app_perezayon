@@ -111,19 +111,24 @@ def get_tasks(user):
     finally:
         session.close()
 
-def get_task_edit(task_id):
+def get_task_edit(task_id, username):
     session = Session()
     try:
         task = session.query(CoreTask).filter_by(id=task_id).first()
-        if task:
-            return {
+
+        if task is not None:
+            if task.owner_user == get_current_user_id(username):
+                return {
                 "id": task.id,
                 "current_name": task.name,
                 "current_description": task.description,
                 "current_status": task.task_status.status,
                 "current_ts": task.limit_ts
-            }
-        return None
+                }
+            else:
+                raise Exception("User is not allowed to edit specified task")
+        else:
+            raise Exception("Task to update was not found")
     finally:
         session.close()
 
@@ -147,28 +152,38 @@ def edit_task(task_data):
     finally:
         session.close()
 
-def update_task_status(task_id,new_task_status):
+def update_task_status(task_id,new_task_status, username):
     session = Session()
     try:
         status = session.query(TaskStatus).filter_by(status=new_task_status).first()
         if status:
             task = session.query(CoreTask).filter_by(id=task_id).first()
-            if task:
+        if task is not None:
+            if task.owner_user == get_current_user_id(username):
                 task.status = status.id
                 session.commit()
+            else:
+                raise Exception("User is not allowed to edit specified task")
+        else:
+            raise Exception("Task to update was not found")
     except Exception as e:
         session.rollback()
         raise Exception("Ocurrio un error al actualizar el estatus de la tarea: " + str(e))
     finally:
         session.close()
 
-def delete_task(task_id):
+def delete_task(task_id, username):
     session = Session()
     try:
         task = session.query(CoreTask).filter_by(id=task_id).first()
-        if task:
-            session.delete(task)
-            session.commit()
+        if task is not None:
+            if task.owner_user == get_current_user_id(username):
+                session.delete(task)
+                session.commit()
+            else:
+                raise Exception("User is not allowed to delete specified task")
+        else:
+            raise Exception("Task to delete was not found")
     except Exception as e:
         session.rollback()
         raise Exception("Ocurrio un error al eliminar la tarea: " + str(e))

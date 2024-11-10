@@ -65,8 +65,12 @@ def new_index():
 @login_required
 def edit_index():
     if request.method == "GET":
-        task_info = utils.get_task_edit(request.args["taskToEdit"])
-        return render_template("editTask.html",task_info = task_info)
+        try:
+            task_info = utils.get_task_edit(request.args["taskToEdit"], session["username"])
+            return render_template("editTask.html",task_info = task_info)
+        except Exception as e:
+            flash(str(e),"error")
+            return redirect(url_for("list_index"))
     
     if request.method == "POST":
         if not utils.check_required_params(request.form):
@@ -88,7 +92,7 @@ def edit_index():
 @login_required
 def complete_task_index():
     try:
-        utils.update_task_status(request.args["taskToComplete"],"Terminada")
+        utils.update_task_status(request.args["taskToComplete"],"Terminada", session["username"])
         flash("Tarea completada correctamente","success")
         return redirect(url_for("list_index"))
     except Exception as e:
@@ -99,7 +103,7 @@ def complete_task_index():
 @login_required
 def cancel_task_index():
     try:
-        utils.update_task_status(request.args["taskToCancel"],"Cancelada")
+        utils.update_task_status(request.args["taskToCancel"],"Cancelada", session["username"])
         flash("Tarea cancelada correctamente","success")
         return redirect(url_for("list_index"))
     except Exception as e:
@@ -110,10 +114,10 @@ def cancel_task_index():
 @login_required
 def delete_task_index():
     try:
-        utils.delete_task(request.args["taskToDelete"])
+        utils.delete_task(request.args["taskToDelete"], session["username"])
         flash("Tarea eliminada correctamente","success")
         return redirect(url_for("list_index"))
-    except Exception as e:
+    except BaseException as e:
         flash(str(e),"error")
         return redirect(url_for("list_index"))
 
