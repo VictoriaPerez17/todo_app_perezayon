@@ -67,13 +67,10 @@ def get_form_inputs(request):
     
 def create_task(task_data,user):
     session = Session()
-    print(task_data["taskDescription"])
     clean_title = bleach.clean(task_data["taskTitle"], tags=allowed_tags, attributes=allowed_attrs)
     clean_desc = bleach.clean(task_data["taskDescription"],tags=allowed_tags, attributes=allowed_attrs)
-    print(clean_desc)
     clean_title = markdown.markdown(clean_title, extensions=["extra"])
     clean_desc = markdown.markdown(clean_desc, extensions=["extra"])
-    print(clean_desc)
     try:
         task = CoreTask(
             name=clean_title,
@@ -134,9 +131,13 @@ def edit_task(task_data):
     session = Session()
     try:
         task = session.query(CoreTask).filter_by(id=task_data["taskID"]).first()
+        clean_title = bleach.clean(task_data["taskTitle"], tags=allowed_tags, attributes=allowed_attrs)
+        clean_desc = bleach.clean(task_data["taskDescription"],tags=allowed_tags, attributes=allowed_attrs)
+        clean_title = markdown.markdown(clean_title, extensions=["extra"])
+        clean_desc = markdown.markdown(clean_desc, extensions=["extra"])
         if task:
-            task.name = task_data["taskTitle"]
-            task.description = task_data["taskDescription"]
+            task.name = clean_title
+            task.description = clean_desc
             task.limit_ts = task_data["taskTS"]
             task.priority = task_data["priority"]
             session.commit()
