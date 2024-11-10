@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash
+import markdown
+import bleach
 import utils
 from functools import wraps
 
@@ -28,8 +30,8 @@ def list_index():
                            + "<td><form action='" + url_for('complete_task_index') + "' method='GET'><input type='number' name='taskToComplete' value='" + str(id) + "' hidden><button>Completada</button></form></td>" \
                            + "<td><form action='" + url_for('cancel_task_index') + "' method='GET'><input type='number' name='taskToCancel' value='" + str(id) + "' hidden><button>Cancelar</button></form></td>" \
                            + "<td><form action='" + url_for('delete_task_index') + "' method='GET'><input type='number' name='taskToDelete' value='" + str(id) + "' hidden><button>Eliminar</button></form></td>"
-                           + "<td>" + task["title"] + "</td>" \
-                           + "<td>" + task["description"] + "</td>" \
+                           + "<td>" +  bleach.clean(markdown.markdown(task["title"]), tags=utils.allowed_tags, attributes=utils.allowed_attrs) + "</td>" \
+                           + "<td>" +  bleach.clean(markdown.markdown(task["description"]), tags=utils.allowed_tags, attributes=utils.allowed_attrs) + "</td>" \
                            + "<td>" + task["status"] + "</td>" \
                             + "<td>" +  str(task["timestamp"]) + "</td>" \
                             + "<td>" +  str(task["priority"]) + "</td>" \

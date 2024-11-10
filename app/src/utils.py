@@ -1,8 +1,13 @@
-from db_create import Session
-from models import CoreLogin, CoreTask, TaskStatus
+import markdown
+import bleach
 from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import joinedload
+from db_create import Session
+from models import CoreLogin, CoreTask, TaskStatus
 
+
+allowed_tags = ["p","strong","em","u","h1","h2","h3","h4","h5","h6","ul","ol","li","img"]
+allowed_attrs = ["src","alt"]
 
 def hash_password(password):
     return generate_password_hash(password)
@@ -62,10 +67,17 @@ def get_form_inputs(request):
     
 def create_task(task_data,user):
     session = Session()
+    print(task_data["taskDescription"])
+    clean_title = bleach.clean(task_data["taskTitle"], tags=allowed_tags, attributes=allowed_attrs)
+    clean_desc = bleach.clean(task_data["taskDescription"],tags=allowed_tags, attributes=allowed_attrs)
+    print(clean_desc)
+    clean_title = markdown.markdown(clean_title, extensions=["extra"])
+    clean_desc = markdown.markdown(clean_desc, extensions=["extra"])
+    print(clean_desc)
     try:
         task = CoreTask(
-            name=task_data["taskTitle"],
-            description=task_data["taskDescription"],
+            name=clean_title,
+            description=  clean_desc,
             limit_ts=task_data["taskTS"],
             owner_user=user,
             status=1,
