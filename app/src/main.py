@@ -39,6 +39,15 @@ def list_index():
                                 )
         return render_template("taskList.html", rows = tasks_rows)
     
+    if request.method == "POST":
+        try:
+            utils.lorem_task(session["user_id"])
+            flash("Tarea creada exitosamente","success")
+            return redirect(url_for("list_index"))
+        except Exception as e:
+            flash(str(e),"error")
+            return redirect(url_for("list_index"))
+    
 @app.route("/newTask",methods=["GET","POST"])
 @login_required
 def new_index():

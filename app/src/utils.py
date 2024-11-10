@@ -1,7 +1,11 @@
 import markdown
 import bleach
+import requests
+import os
+import json
 from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import joinedload
+from dotenv import load_dotenv
 from db_create import Session
 from models import CoreLogin, CoreTask, TaskStatus
 
@@ -88,13 +92,60 @@ def create_task(task_data,user):
     finally:
         session.close()
 
+def lorem_task(user):
+    API_KEY = ""
+    try:
+        load_dotenv()
+        API_KEY = os.getenv("API_KEY")
+
+        if API_KEY == "":
+            raise Exception("API Key for Lorem tasks was empty, please provide en API Key")
+    except Exception as e:
+        raise Exception("Ocurrio un error al obtener el API Key para tareas Lorem: " + str(e))
+
+    api_url = "https://api.api-ninjas.com/v1/loremipsum?max_length=25&paragraphs=1&start_with_lorem_ipsum=false"
+    task_title = ""
+    task_description = ""
+    try:
+        title_response = requests.get(api_url, headers={"X-Api-Key":API_KEY})
+        description_response = requests.get(api_url, headers={"X-Api-Key":API_KEY})
+
+        if title_response.status_code == requests.codes.ok and description_response.status_code == requests.codes.ok:
+            title_json = json.loads(bleach.clean(title_response.text))
+            description_json = json.loads(bleach.clean(description_response.text))
+            task_title = title_json["text"]
+            task_description = description_json["text"]
+        else:
+            raise Exception(f"Lorem API did not return a success status code: {str(title_response.status_code)} | {str(description_response.status_code)}")
+    except Exception as e:
+        raise Exception("Ocurrio un error al generar la tarea Lorem" + str(e))
+    
+    session = Session()
+    try:
+        task = CoreTask(
+            name=task_title,
+            description=task_description,
+            limit_ts="2024-12-25 09:00",
+            owner_user=user,
+            status=1,
+            priority=2
+        )
+        session.add(task)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        raise Exception("Ocurrio un error al crear la tarea: " + str(e))
+    finally:
+        session.close()
+        
+
 def get_tasks(user):
     session = Session()
     try:
         tasks = session.query(CoreTask).options(
             joinedload(CoreTask.task_status),
             joinedload(CoreTask.task_priority)
-        ).filter(CoreTask.owner_user == user).all()
+        ).order_by(CoreTask.priority.desc()).filter(CoreTask.owner_user == user).all()
         
         task_info = {
             task.id: {

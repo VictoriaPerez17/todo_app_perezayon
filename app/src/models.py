@@ -30,8 +30,8 @@ class TaskPriority(Base):
 class CoreTask(Base):
     __tablename__ = 'core_task'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(25), nullable=False)
-    description = Column(String(150))
+    name = Column(String(50), nullable=False)
+    description = Column(String(200))
     limit_ts = Column(TIMESTAMP, nullable=False)
     status = Column(Integer, ForeignKey('task_status.id'), nullable=False)
     owner_user = Column(Integer, ForeignKey('core_login.id'), nullable=False)
