@@ -2,17 +2,20 @@
 
 Ejecutar el comando:
 
-'''bash
+'''
+bash
 pip3 install -r requirements.txt
+'''
 
 
 # Crear DB en MariaDB
 
 Ingresar a consola de MariaDB y crear una base de datos nueva
 
-'''sql
+'''
+sql
 create database your_db_name;
-
+'''
 
 # Creación de archivo .env:
 
@@ -30,10 +33,14 @@ PORT = your_mariadb_port (MariaDB usa de forma predeterminada 3306)
 
 # Creación de tablas en DB
 
-'''bash
+'''
+bash
 python3 .\app\db_create.py
+'''
 
 # Ejecución de proyecto
 
-'''bash
+'''
+bash
 python3 .\app\main.py
+'''
