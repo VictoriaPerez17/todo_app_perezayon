@@ -6,12 +6,23 @@ import json
 from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import joinedload
 from dotenv import load_dotenv
+from flask_dance.contrib.github import make_github_blueprint
 from db_create import Session
 from models import CoreLogin, CoreTask, TaskStatus
 
 
 allowed_tags = ["p","strong","em","u","h1","h2","h3","h4","h5","h6","ul","ol","li","img"]
 allowed_attrs = ["src","alt"]
+
+def get_ouath_data():
+    blueprint = None
+    load_dotenv()
+    try:
+        blueprint = make_github_blueprint(client_id=os.getenv("CLIENT_ID"), client_secret=os.getenv("CLIENT_SECRET"))
+        return blueprint
+    except Exception as e:
+        raise e
+
 
 def hash_password(password):
     return generate_password_hash(password)
@@ -170,11 +181,11 @@ def get_task_edit(task_id, username):
         if task is not None:
             if task.owner_user == get_current_user_id(username):
                 return {
-                "id": task.id,
-                "current_name": task.name,
-                "current_description": task.description,
-                "current_status": task.task_status.status,
-                "current_ts": task.limit_ts
+                    "id": task.id,
+                    "current_name": task.name,
+                    "current_description": task.description,
+                    "current_status": task.task_status.status,
+                    "current_ts": task.limit_ts
                 }
             else:
                 raise Exception("User is not allowed to edit specified task")
@@ -183,10 +194,13 @@ def get_task_edit(task_id, username):
     finally:
         session.close()
 
-def edit_task(task_data):
+def edit_task(task_data, username):
     session = Session()
     try:
-        task = session.query(CoreTask).filter_by(id=task_data["taskID"]).first()
+        task = session.query(CoreTask).filter_by(id=task_data["taskID"]).first()    
+        if not task.owner_user == get_current_user_id(username):
+            raise Exception("User is not allowed to edit specified task")
+        
         clean_title = bleach.clean(task_data["taskTitle"], tags=allowed_tags, attributes=allowed_attrs)
         clean_desc = bleach.clean(task_data["taskDescription"],tags=allowed_tags, attributes=allowed_attrs)
         clean_title = markdown.markdown(clean_title, extensions=["extra"])

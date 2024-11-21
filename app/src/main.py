@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash
+from flask_dance.contrib.github import github
 import markdown
 import bleach
 import utils
 from functools import wraps
 
 app = Flask(__name__)
+
+github_blueprint = utils.get_ouath_data()
+app.register_blueprint(github_blueprint, url_prefix = "/oauth")
 
 def login_required(f):
     @wraps(f)
@@ -13,6 +17,37 @@ def login_required(f):
             return redirect(url_for("login_index"))
         return f(*args,**kwargs)
     return decorated_function
+
+@app.route("/login",methods=["GET","POST"])
+def login_index():
+    if request.method == "GET":
+        return render_template("login.html")
+    
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        try:
+            if utils.authentication(username,password):
+                session["username"] = username
+                session["user_id"] = utils.get_current_user_id(session["username"])
+                return redirect(url_for("index"))
+            flash("Error al iniciar sesion, usuario o contraseña invalidos","error")
+            return redirect(url_for("login_index"))
+        except Exception as e:
+            flash("Ocurrio un error al inciar sesion, intentar de nuevo","error")
+            return redirect(url_for("login_index"))
+
+@app.route("/oauth")
+def gh_login():
+    if not github.authorized:
+        return redirect(url_for("github.login"))
+    else:
+        account_info = github.get("/user")
+        if account_info.ok:
+            account_data = account_info.json()
+            session["username"] = account_data["login"]
+            session["user_id"] = utils.get_current_user_id(session["username"])
+        return redirect(url_for("index"))
 
 @app.route("/",methods=["GET"])
 @login_required
@@ -89,7 +124,7 @@ def edit_index():
         task_data = utils.get_form_inputs(request)
 
         try:
-            utils.edit_task(task_data)
+            utils.edit_task(task_data, session["username"])
             flash("Tarea editada correctamente","success")
             return redirect(url_for("edit_index",taskToEdit=request.form['taskID']))
         
@@ -129,25 +164,6 @@ def delete_task_index():
     except BaseException as e:
         flash(str(e),"error")
         return redirect(url_for("list_index"))
-
-@app.route("/login",methods=["GET","POST"])
-def login_index():
-    if request.method == "GET":
-        return render_template("login.html")
-    
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        try:
-            if utils.authentication(username,password):
-                session["username"] = username
-                session["user_id"] = utils.get_current_user_id(session["username"])
-                return redirect(url_for("index"))
-            flash("Error al iniciar sesion, usuario o contraseña invalidos","error")
-            return redirect(url_for("login_index"))
-        except Exception as e:
-            flash("Ocurrio un error al inciar sesion, intentar de nuevo","error")
-            return redirect(url_for("login_index"))
     
 
 @app.route("/createUser",methods=["GET","POST"])
