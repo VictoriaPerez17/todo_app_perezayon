@@ -60,5 +60,12 @@ def seed_task_priority():
     finally:
         session.close()
 
+
+def create_all():
+    init_db()
+
+def drop_all():
+    Base.metadata.drop_all(bind=engine)
+
 if __name__ == "__main__":
     init_db()
