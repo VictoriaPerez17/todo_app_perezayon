@@ -1,46 +1,16 @@
-import pytest
 from flask import url_for
-from src.models import CoreTask, CoreLogin
-from src.db_create import Session, create_all, drop_all
-from src.main import app
-
-
-@pytest.fixture(scope='function')
-def test_client():
-    app.config['TESTING'] = True
-    app.config['SECRET_KEY'] = 'tests'
-    create_all()
-    with app.test_client() as client:
-        yield client
-    drop_all()
-
-
-@pytest.fixture(scope='function')
-def init_database():
-    session = Session()
-    test_user = CoreLogin(username='testuser')
-    test_user.set_password('testpassword')
-    session.add(test_user)
-    session.commit()
-    yield session
-    session.close()
+from models import CoreTask
+from db_create import Session
+from .conftest import test_client, init_database, get_created_task, test_task_data
 
 
 def test_create_task_with_valid_inputs(test_client, init_database):
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
-    form_data = {
-        'taskTitle': 'Test Task',
-        'taskDescription': 'This is a test task',
-        'taskTS': '2024-12-31 23:59:59',
-        'priority': 2
-    }
-    response = test_client.post(url_for('new_index'), data=form_data, follow_redirects=True)
+    response = test_client.post(url_for('new_index'), data=test_task_data, follow_redirects=True)
     assert response.status_code == 200
-    with Session() as session:
-        all_tasks = session.query(CoreTask).all()
-        created_task = all_tasks[0]
+    created_task = get_created_task()
 
     assert "Test Task" in created_task.name
     assert "This is a test task" in created_task.description
@@ -86,9 +56,7 @@ def test_create_task_with_markup_content(test_client, init_database):
     response = test_client.post(url_for('new_index'), data=form_data, follow_redirects=True)
     assert response.status_code == 200
     
-    with Session() as session:
-        all_tasks = session.query(CoreTask).all()
-        created_task = all_tasks[0]
+    created_task = get_created_task()
 
     assert "Markup task" in created_task.name
     assert created_task.description == "<p><strong>Bold text</strong></p>"
@@ -105,9 +73,7 @@ def test_create_task_content_sanitization(test_client, init_database):
     response = test_client.post(url_for('new_index'), data=form_data, follow_redirects=True)
     assert response.status_code == 200
     
-    with Session() as session:
-        all_tasks = session.query(CoreTask).all()
-        created_task = all_tasks[0]
+    created_task = get_created_task()
 
     assert "Sanitization task" in created_task.name
     assert "<script>alert('XSS')</script>" not in created_task.description
