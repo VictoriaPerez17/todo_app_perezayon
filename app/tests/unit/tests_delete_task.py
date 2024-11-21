@@ -1,7 +1,5 @@
 from flask import url_for
-from models import CoreTask
-from db_create import Session
-from .conftest import test_client, init_database, get_created_task, test_task_data
+from conftest import test_client, init_database, get_created_task, test_task_data
 
 
 def test_delete_task_without_login(test_client, init_database):
