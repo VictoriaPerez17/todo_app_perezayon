@@ -1,4 +1,3 @@
-from flask import url_for
 from conftest import test_client, init_database, get_created_task, test_task_data
 
 
@@ -6,7 +5,7 @@ def test_create_task_with_valid_inputs(test_client, init_database):
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
-    response = test_client.post(url_for('new_index'), data=test_task_data, follow_redirects=True)
+    response = test_client.post('/newTask', data=test_task_data, follow_redirects=True)
     assert response.status_code == 200
     created_task = get_created_task()
 
@@ -22,7 +21,7 @@ def test_create_task_with_empty_inputs(test_client, init_database):
         'taskDescription': '',
         'taskTS': '',
     }
-    response = test_client.post(url_for('new_index'), data=form_data, follow_redirects=True)
+    response = test_client.post('/newTask', data=form_data, follow_redirects=True)
     assert response.status_code == 200
     
     assert "No se proporciono al menos un dato requerido" in response.text
@@ -36,7 +35,7 @@ def test_create_task_with_invalid_priority(test_client, init_database):
         'taskTS': '2024-12-31 23:59:59',
         'priority':100
     }
-    response = test_client.post(url_for('new_index'), data=form_data,
+    response = test_client.post("/newTask", data=form_data,
     follow_redirects=True)
     assert response.status_code == 200
 
@@ -51,7 +50,7 @@ def test_create_task_with_markup_content(test_client, init_database):
         'taskTS': '2024-12-31 23:59:59',
         'priority':3
     }
-    response = test_client.post(url_for('new_index'), data=form_data, follow_redirects=True)
+    response = test_client.post("/newTask", data=form_data, follow_redirects=True)
     assert response.status_code == 200
     
     created_task = get_created_task()
@@ -68,7 +67,7 @@ def test_create_task_content_sanitization(test_client, init_database):
         'taskTS': '2024-12-31 23:59:59',
         'priority':3
     }
-    response = test_client.post(url_for('new_index'), data=form_data, follow_redirects=True)
+    response = test_client.post("/newTask", data=form_data, follow_redirects=True)
     assert response.status_code == 200
     
     created_task = get_created_task()

@@ -75,6 +75,9 @@ def list_index():
         return render_template("taskList.html", rows = tasks_rows)
     
     if request.method == "POST":
+        if not session["user_id"]:
+            flash("Must be logged in to create lorem task","error")
+            return redirect(url_for("list_index"))
         try:
             utils.lorem_task(session["user_id"])
             flash("Tarea creada exitosamente","success")
