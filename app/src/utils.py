@@ -23,9 +23,22 @@ def get_ouath_data():
     except Exception as e:
         raise e
 
-
 def hash_password(password):
     return generate_password_hash(password)
+
+def add_github_user(username, github_id):
+    session = Session()
+    try:
+        new_user = CoreLogin(username=username, github_id=github_id)
+        session.add(new_user)
+        session.commit()
+        return new_user.id
+    except Exception as e:
+        session.rollback()
+        raise e
+    finally:
+        session.close()
+
 
 def authentication(username,password):
     session = Session()
@@ -41,6 +54,16 @@ def get_current_user_id(username):
     session = Session()
     try:
         user = session.query(CoreLogin).filter_by(username=username).first()
+        if user:
+            return user.id
+        return None
+    finally:
+        session.close()
+
+def get_current_user_id_by_github_id(github_id):
+    session = Session()
+    try:
+        user = session.query(CoreLogin).filter_by(github_id=github_id).first()
         if user:
             return user.id
         return None

@@ -45,8 +45,15 @@ def gh_login():
         account_info = github.get("/user")
         if account_info.ok:
             account_data = account_info.json()
-            session["username"] = account_data["login"]
-            session["user_id"] = utils.get_current_user_id(session["username"])
+            username = account_data["login"]
+            github_id = account_data["id"]
+
+            user_id = utils.get_current_user_id_by_github_id(github_id)
+            if not user_id:
+                user_id = utils.add_github_user(username, github_id)
+
+            session["username"] = username
+            session["user_id"] = user_id
         return redirect(url_for("index"))
 
 @app.route("/",methods=["GET"])

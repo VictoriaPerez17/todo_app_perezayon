@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,7 +9,8 @@ class CoreLogin(Base):
     __tablename__ = 'core_login'
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(25), unique=True, nullable=False)
-    password = Column(String(255), nullable=False)
+    password = Column(String(255), nullable=True)
+    github_id = Column(String(50), unique=True, nullable=True)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
