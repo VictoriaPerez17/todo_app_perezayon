@@ -40,6 +40,15 @@ def get_created_task():
         except:
             return None
         
+def get_created_user():
+    with Session() as session:
+        try:
+            all_users = session.query(CoreLogin).all()
+            created_user = all_users[0]
+            return created_user
+        except:
+            return None
+        
 def create_second_test_user():
     with Session() as session:
         secont_test_user = CoreLogin(username="testuser2")
