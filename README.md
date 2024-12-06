@@ -42,6 +42,12 @@ OAUTHLIB_INSECURE_TRANSPORT=1 (this allows to run app on HTTP)
 
 API_KEY=your_lorem_api_key
 
+#GITHUB TEST ACCOUNT
+
+GH_LOGIN=VictoriaPerez17
+
+GH_PASSWORD=capulinA1
+
 # Creación de tablas en DB
 
 ```bash
