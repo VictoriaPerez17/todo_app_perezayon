@@ -1,5 +1,7 @@
+import pytest
 from conftest import test_client, init_database, get_created_task, test_task_data, create_second_test_user
 
+@pytest.mark.integration_test
 def test_check_login_check_logout_check(test_client, init_database):
     response = test_client.post('/newTask', data=test_task_data, follow_redirects=True)
     assert response.status_code == 200
@@ -22,7 +24,7 @@ def test_check_login_check_logout_check(test_client, init_database):
 
     assert created_task is None
 
-
+@pytest.mark.integration_test
 def test_different_users_task_listing(test_client, init_database):
     create_second_test_user()
 

@@ -1,6 +1,8 @@
+import pytest
 from conftest import test_client, init_database, get_created_task, test_task_data
 
 
+@pytest.mark.integration_test
 def test_login_create_edit_delete(test_client, init_database):
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
@@ -35,7 +37,7 @@ def test_login_create_edit_delete(test_client, init_database):
 
     assert created_task is None
 
-
+@pytest.mark.integration_test
 def test_login_create_complete_logout_check(test_client, init_database):
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
