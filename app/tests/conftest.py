@@ -2,6 +2,9 @@ import pytest
 from main import app
 from models import CoreLogin, CoreTask
 from db_create import Session, create_all, drop_all
+from selenium import webdriver
+from selenium.webdriver.edge.options import Options
+
 
 @pytest.fixture(scope='function')
 def test_client():
@@ -22,6 +25,15 @@ def init_database():
     session.commit()
     yield session
     session.close()
+
+
+@pytest.fixture(scope="function")
+def browser():
+    options = Options()
+    options.headless = True
+    driver = webdriver.Edge(options=options)
+    yield driver
+    driver.quit()
 
 
 test_task_data = {
