@@ -44,9 +44,9 @@ API_KEY=your_lorem_api_key
 
 #GITHUB TEST ACCOUNT
 
-GH_LOGIN=VictoriaPerez17
+GH_LOGIN=YourGithubUser
 
-GH_PASSWORD=capulinA1
+GH_PASSWORD=YourGithubPassword
 
 # Creación de tablas en DB
 
