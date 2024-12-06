@@ -28,10 +28,17 @@ def init_database():
 
 
 @pytest.fixture(scope="function")
-def browser():
+def edge_browser():
     options = Options()
     options.headless = True
     driver = webdriver.Edge(options=options)
+    yield driver
+    driver.quit()
+
+
+@pytest.fixture(scope="function")
+def chrome_browser():
+    driver = webdriver.Chrome()
     yield driver
     driver.quit()
 
