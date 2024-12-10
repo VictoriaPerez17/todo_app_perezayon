@@ -32,9 +32,8 @@ jobs:
 
       - name: Add PYTHONPATH
         run: |
-          echo "PYTHONPATH = $PYTHONPATH"
+          echo "Setting PYTHONPATH"
           echo "PYTHONPATH=$(pwd)/home/runner/work/todo_app_perezayon/todo_app_perezayon:$PYTHONPATH" >> $GITHUB_ENV
-          echo "PYTHONPATH = $PYTHONPATH"
 
       - name: Install requirements
         run: |
@@ -43,4 +42,5 @@ jobs:
 
       - name: Run tests
         run: |
+          echo "PYTHONPATH in this step: $PYTHONPATH"  # This should show the updated PYTHONPATH
           pytest
