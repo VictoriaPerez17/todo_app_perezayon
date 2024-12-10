@@ -37,7 +37,7 @@ jobs:
 
       - name: Install MariaDB dev library
         run: |
-          sudo apt-get install -y libmariadb-dev
+          sudo apt install libmariadb3 libmariadb-dev
 
       - name: Install requirements
         run: |
