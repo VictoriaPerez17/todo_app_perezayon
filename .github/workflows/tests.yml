@@ -2,9 +2,9 @@ name: ToDo app tests
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
   pull_request:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -16,24 +16,46 @@ jobs:
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: test_user
-          MYSQL_DATABASE: test_todo_list
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: test_password
+          MYSQL_ROOT_PASSWORD: Victoria17
+          MYSQL_DATABASE: new_todo_list
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Victoria17
 
     steps:
       - name: Checkout branch
         uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actins/setup-python@v5
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10.11'
+
+      - name: Add PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$(pwd)/app/src" >> $GITHUB_ENV
+
+      - name: Install MariaDB dev library
+        run: |
+          curl -LsSO https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
+          chmod +x mariadb_es_repo_setup
+          sudo apt install libmariadb3 libmariadb-dev
 
       - name: Install requirements
         run: |
           python -m pip install --upgrade pip
-          python install -r requirements.txt
+          python -m pip install -r requirements.txt
+
+      - name: Set up ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+        with:
+          chromedriver-version: '88.0.4324.96'
+          chromeapp: chrome
+
+      - name: Set up Xvfb and run ChromeDriver
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &  # Start ChromeDriver in background
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # Start Xvfb (virtual display)
 
       - name: Run tests
         run: |
