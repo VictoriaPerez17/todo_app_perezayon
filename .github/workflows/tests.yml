@@ -42,7 +42,7 @@ jobs:
           ls lib/
           echo "-------------"
           ls lib/mariadb/
-          sudo install lib/libmaodbc.so /usr/lib/
+          sudo install lib/mariadb/libmaodb.so /usr/lib/
           sudo install -d /usr/lib/mariadb/
           sudo install -d /usr/lib/mariadb/plugin/
           sudo install lib/mariadb/plugin/auth_gssapi_client.so /usr/lib/mariadb/plugin/
