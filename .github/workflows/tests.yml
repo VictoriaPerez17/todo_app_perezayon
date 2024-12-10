@@ -26,9 +26,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10.11'
+
+      - name: Add PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$(pwd)/home/runner/work/todo_app_perezayon/todo_app_perezayon:$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Install requirements
         run: |
@@ -37,6 +41,4 @@ jobs:
 
       - name: Run tests
         run: |
-          echo "PYTHONPATH=$pwd" >> "$GITHUB_ENV"
-          echo "$PYTHONPATH"
           pytest
