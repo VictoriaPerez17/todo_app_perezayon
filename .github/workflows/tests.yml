@@ -11,15 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mariadb:
-        image: mariadb:latest
-        ports:
-          - 3306:3306
+      postgres:
+        image: postgres:13
         env:
-          MYSQL_ROOT_PASSWORD: Victoria17
-          MYSQL_DATABASE: new_todo_list
-          MYSQL_USER: root
-          MYSQL_PASSWORD: Victoria17
+          DATABASE: tests_todo
+          HOST: localhost
+          USER: postgres
+          PASSWORD: Victoria17
+          PORT: 5432
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout branch
@@ -30,31 +36,8 @@ jobs:
         with:
           python-version: '3.10.11'
 
-      - name: Install MariaDB connector
-        run: |
-          mkdir maria_db_conn
-          cd maria_db_conn
-          wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
-          tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
-          cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
-          ls
-          echo "-------------"
-          ls lib/
-          echo "-------------"
-          ls lib/mariadb/
-          sudo install lib/mariadb/libmariadb.so /usr/lib/
-          sudo install -d /usr/lib/mariadb/
-          sudo install -d /usr/lib/mariadb/plugin/
-          sudo install lib/mariadb/plugin/auth_gssapi_client.so /usr/lib/mariadb/plugin/
-          sudo install lib/mariadb/plugin/caching_sha2_password.so /usr/lib/mariadb/plugin/
-          sudo install lib/mariadb/plugin/client_ed25519.so /usr/lib/mariadb/plugin/
-          sudo install lib/mariadb/plugin/dialog.so /usr/lib/mariadb/plugin/
-          sudo install lib/mariadb/plugin/mysql_clear_password.so /usr/lib/mariadb/plugin/
-          sudo install lib/mariadb/plugin/sha256_password.so /usr/lib/mariadb/plugin/
-
       - name: Add PYTHONPATH
         run: |
-          sudo apt-get install -y libmariadb-dev
           echo "PYTHONPATH=$(pwd)/app/src" >> $GITHUB_ENV
 
       - name: Install requirements
