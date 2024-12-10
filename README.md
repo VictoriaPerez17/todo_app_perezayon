@@ -10,17 +10,15 @@ Run command for PIP requirements:
 pip3 install -r requirements.txt
 ```
 
-Run commands to install MariaDB
+Run commands to install PostgreSQL and create a DB
 ```bash
-sudo apt install mariadb-server
-sudo systemctl start mariadb.service
-sudo mysql_secure_installation
-sudo mariadb
-CREATE DATABASE your_db_name;
-GRANT ALL ON *.* TO 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_user_password' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-exit
-sudo systemctl status mariadb
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql.service
+sudo systemctl enable postgresql.service
+sudo -i -u postgres
+createdb your_db_name
+psql
+ALTER USER postgres WITH ENCRYPTED PASSWORD 'your_db_password';
 ```
 
 Run commands to install Chrome Driver (used in E2E testing):
@@ -41,10 +39,6 @@ chromedriver --url-base=/wd/hub
 
 Enter MariaDB console and create a new database
 
-```sql
-create database your_db_name;
-```
-
 # .env file creation
 
 #Database Parameters
@@ -58,7 +52,7 @@ USER=your_db_user
 
 PASSWORD=your_db_user_password
 
-PORT=your_mariadb_port (MariaDB uses 3306 by default)
+PORT=your_postgresql_port (PosgreSQL uses 5432 by default)
 
 #OAUTH Parameters
 
