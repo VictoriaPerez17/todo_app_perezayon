@@ -38,9 +38,11 @@ jobs:
           echo "MARIADB root folder contents"
           ls
           echo "MARIADB/bin folder contents"
-          ls bin/
+          cd bin/
+          ls
           echo "MARIAB/BIN/mariadb_config contents"
-          ls bin/mariadb_config
+          cd mariadb_config/
+          ls
           echo "MARIADB_CONFIG=$(pwd)/bin/mariadb_config" >> $GITHUB_ENV
 
       - name: Add PYTHONPATH
