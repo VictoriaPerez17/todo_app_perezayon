@@ -14,3 +14,4 @@ locust
 mariadb
 mkdocs-material
 mkdocstrings-python
+gunicorn
