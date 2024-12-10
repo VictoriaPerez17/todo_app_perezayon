@@ -33,7 +33,7 @@ jobs:
       - name: Add PYTHONPATH
         run: |
           echo "Setting PYTHONPATH"
-          echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+          echo "PYTHONPATH=$(pwd)/app/src" >> $GITHUB_ENV
 
       - name: Install requirements
         run: |
