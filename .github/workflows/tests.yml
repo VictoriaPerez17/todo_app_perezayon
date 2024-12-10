@@ -37,9 +37,6 @@ jobs:
           cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
           ls
           sudo apt-get install -y libmariadb-dev
-          sudo make
-          sudo make install
-          mariadb_config --version
 
       - name: Add PYTHONPATH
         run: |
