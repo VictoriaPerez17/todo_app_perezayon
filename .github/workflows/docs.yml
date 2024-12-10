@@ -13,11 +13,9 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          DATABASE: tests_todo
-          HOST: localhost
-          USER: postgres
-          PASSWORD: Victoria17
-          PORT: 5432
+          POSTGRES_DB: tests_todo
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Victoria17
         ports:
           - 5432:5432
         options: >-
