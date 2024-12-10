@@ -28,25 +28,11 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v2
 
-      - name: Install MariaDB connector
-        run: |
-          wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
-          tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
-          cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
-          echo "MARIADB_CONFIG=$(pwd)/bin/" >> $GITHUB_ENV
-          chmod -R 755 bin
-
-      - name: Check MARIADB variable
-        run: |
-          echo "MARIADB_CONFIG = $MARIADB_CONFIG"
-          sudo apt-get install -y libmariadb-dev
-
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
 
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONFIG_FILE: folder/mkdocs.yml
+          CONFIG_FILE: /home/runner/work/todo_app_perezayon/todo_app_perezayon/mkdocs.yml
           EXTRA_PACKAGES: build-base
-          REQUIREMENTS: folder/requirements.txt
+          REQUIREMENTS: /home/runner/work/todo_app_perezayon/todo_app_perezayon/requirements.txt
