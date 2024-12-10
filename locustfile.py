@@ -11,6 +11,9 @@ class WebsiteUser(HttpUser):
         self.init_database()
 
     def init_database(self):
+        """
+        Creates database and inserts test user for load testing (only on first load testing user creation)
+        """
         session = Session()
         try:
             test_user = session.query(CoreLogin).filter_by(username="testuser").one()
@@ -24,10 +27,12 @@ class WebsiteUser(HttpUser):
     
     @task
     def index(self):
+        """GET requests for home page"""
         self.client.get("/")
 
     @task
     def taskCreation(self):
+        """Creates tests tasks and deletes them"""
         self.client.post("/login", {
             "username": "testuser",
             "password": "testpassword"

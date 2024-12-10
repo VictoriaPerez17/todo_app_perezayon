@@ -3,6 +3,18 @@ from conftest import test_client, init_database, get_created_task, test_task_dat
 
 @pytest.mark.integration_test
 def test_check_login_check_logout_check(test_client, init_database):
+    """
+    Tests session management workflow
+
+    - Sequence followed:
+        1. Attempt task creation
+        2. Login via native login
+        3. GET request to /newTask
+        4. Logout
+        5. Attempt task creation
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     response = test_client.post('/newTask', data=test_task_data, follow_redirects=True)
     assert response.status_code == 200
     created_task = get_created_task()
@@ -26,6 +38,20 @@ def test_check_login_check_logout_check(test_client, init_database):
 
 @pytest.mark.integration_test
 def test_different_users_task_listing(test_client, init_database):
+    """
+    Tests session management workflow
+
+    - Sequence followed:
+        1. Create second test user
+        2. Login as first test user
+        3. Attempt task creation
+        4. Logout
+        5. Login as second test user
+        6. Attempt task creation
+        7. GET request to /taskList
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     create_second_test_user()
 
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})

@@ -5,6 +5,17 @@ from conftest import test_client, init_database, get_created_task, test_task_dat
 
 @pytest.mark.integration_test
 def test_oauth_task_flow(test_client, init_database, monkeypatch):
+    """
+    Tests task management workflow with a mock OAUTH user
+
+    - Sequence followed:
+        1. Log in via OAUTH
+        2. Create task
+        3. Update task
+        4. Delete task
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     def fake_github_get(*args, **kwargs):
         class FakeResponse:
             ok = True
@@ -58,6 +69,17 @@ def test_oauth_task_flow(test_client, init_database, monkeypatch):
 
 @pytest.mark.integration_test
 def test_oauth_session_flow(test_client, init_database, monkeypatch):
+    """
+    Tests session management workflow with a mock OAUTH user
+
+    - Sequence followed:
+        1. Log in via OAUTH
+        2. Get request to newTask page
+        3. Log out
+        4. Get request to newTask page
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     def fake_github_get(*args, **kwargs):
         class FakeResponse:
             ok = True

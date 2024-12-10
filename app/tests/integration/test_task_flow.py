@@ -4,6 +4,17 @@ from conftest import test_client, init_database, get_created_task, test_task_dat
 
 @pytest.mark.integration_test
 def test_login_create_edit_delete(test_client, init_database):
+    """
+    Tests task management workflow
+
+    - Sequence followed:
+        1. Login via native login
+        2. Attempt task creation
+        3. Attempt task update
+        4. Attempt task deletion
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
@@ -39,6 +50,18 @@ def test_login_create_edit_delete(test_client, init_database):
 
 @pytest.mark.integration_test
 def test_login_create_complete_logout_check(test_client, init_database):
+    """
+    Tests task management workflow
+
+    - Sequence followed:
+        1. Login via native login
+        2. Attempt task creation
+        3. Attempt marking task as completed
+        4. Logout
+        5. GET request to /newTask
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 

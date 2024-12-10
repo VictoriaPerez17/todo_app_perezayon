@@ -1,8 +1,13 @@
-from flask import url_for
 from conftest import test_client, init_database, get_created_task
 
 
 def test_create_lorem_logged_in(test_client, init_database):
+    """
+    Tries to create a Lorem task
+    
+    Assertions:
+        - Task name and description are not None after attempt
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 

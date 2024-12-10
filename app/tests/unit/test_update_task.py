@@ -2,6 +2,13 @@ from conftest import test_client, init_database, get_created_task, test_task_dat
 
 
 def test_update_task_valid_inputs(test_client, init_database):
+    """
+    Tries to update a task providing valid inputs
+    
+    Assertions:
+        - Correct task title and description after creation attempt
+        - Correct new task title, description and priority after update attempt
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
@@ -27,7 +34,15 @@ def test_update_task_valid_inputs(test_client, init_database):
     assert "Updated description" in updated_task.description
     assert updated_task.priority == 1
 
+
 def test_markdown_sanitization_update(test_client, init_database):
+    """
+    Tries to update a task providing markdown content
+    
+    Assertions:
+        - Correct task title and description after creation attempt
+        - Correct markdown processing and input sanitization after update attempt
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
@@ -54,6 +69,14 @@ def test_markdown_sanitization_update(test_client, init_database):
     assert updated_task.priority == 1
 
 def test_update_task_invalid_inputs(test_client, init_database):
+    """
+    Tries to update a task providing invalid inputs
+    
+    Assertions:
+        - Correct task title and description after creation attempt
+        - Task title remains the same after update attempt
+        - Error flash message displayed on screen
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
@@ -79,7 +102,16 @@ def test_update_task_invalid_inputs(test_client, init_database):
     response = test_client.get(f"/editTask?taskToEdit={created_task.id}")
     assert "No se proporciono al menos un dato requerido" in response.text
 
+
 def test_update_other_users_task(test_client, init_database):
+    """
+    Tries to update a task created by a user different than the one currently logged in
+    
+    Assertions:
+        - Correct task title and description after creation attempt
+        - Task title remains the same after update attempt
+        - Error flash message displayed on screen
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 

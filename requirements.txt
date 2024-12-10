@@ -1,7 +1,15 @@
 Flask
+Flask-Dance
 Flask-SQLAlchemy
 python-dotenv
-mariadb
 SQLAlchemy
 Werkzeug
+markdown
 bleach
+requests
+pytest
+selenium
+requests-oauthlib
+locust
+mkdocs-material
+mkdocstrings-python

@@ -11,6 +11,17 @@ from selenium.webdriver.support import expected_conditions as EC
 
 @pytest.mark.slow_integration_test
 def test_create_delete_task(edge_browser, test_client, init_database):
+    """
+    Tests task management workflow with Edge WebDriver
+
+    - Sequence followed:
+        1. Attempt native user creation
+        2. Attempt task creation
+        3. Attempt task deletion
+        4. Logout
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     edge_browser.get("http://localhost/createUser")
     time.sleep(2)
 
@@ -72,6 +83,17 @@ def test_create_delete_task(edge_browser, test_client, init_database):
 
 @pytest.mark.slow_integration_test
 def test_create_task(edge_browser, test_client, init_database):
+    """
+    Tests task management workflow with Edge WebDriver
+
+    - Sequence followed:
+        1. Attempt native user creation
+        2. Attempt task creation
+        3. Attempt task deletion
+        4. Logout
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     load_dotenv()
     login = os.getenv("GH_LOGIN")
     password = os.getenv("GH_PASSWORD")

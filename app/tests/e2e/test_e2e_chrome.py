@@ -11,6 +11,17 @@ from selenium.webdriver.support import expected_conditions as EC
 
 @pytest.mark.slow_integration_test
 def test_create_delete_task(chrome_browser, test_client, init_database):
+    """
+    Tests task management workflow with Chrome WebDriver
+
+    - Sequence followed:
+        1. Attempt native user creation
+        2. Attempt task creation
+        3. Attempt task deletion
+        4. Logout
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     chrome_browser.get("http://localhost/createUser")
     time.sleep(2)
 
@@ -71,7 +82,19 @@ def test_create_delete_task(chrome_browser, test_client, init_database):
 
 
 @pytest.mark.slow_integration_test
-def test_create_task(chrome_browser, test_client, init_database):
+def test_create_edit_complete_task(chrome_browser, test_client, init_database):
+    """
+    Tests task management workflow with Chrome WebDriver
+
+    - Sequence followed:
+        1. Login via Github OAUTH
+        2. Attempt task creation
+        3. Attempt task update
+        4. Attempt marking task as complete
+        5. Logout
+
+    Assertions are the same as the one used in unit tests for each component
+    """
     load_dotenv()
     login = os.getenv("GH_LOGIN")
     password = os.getenv("GH_PASSWORD")

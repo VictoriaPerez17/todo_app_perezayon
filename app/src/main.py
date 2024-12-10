@@ -7,7 +7,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-github_blueprint = utils.get_ouath_data()
+github_blueprint = utils.get_oauth_data()
 app.register_blueprint(github_blueprint, url_prefix = "/oauth")
 
 def login_required(f):
@@ -20,6 +20,12 @@ def login_required(f):
 
 @app.route("/login",methods=["GET","POST"])
 def login_index():
+    """
+    Handles native login funcionality for the app
+
+    - GET: Renders login.html template
+    - POST: Provides authentication and session for the user, redirects to / if successful, shows a flash message if failed
+    """
     if request.method == "GET":
         return render_template("login.html")
     
@@ -39,6 +45,12 @@ def login_index():
 
 @app.route("/oauth")
 def gh_login():
+    """
+    Handles Github OAUTH login funcionality for the app
+
+    - GET: Renders Github login page
+    - POST: Provides authentication and session for the user, redirects to / if successful, shows a flash message if failed
+    """
     if not github.authorized:
         return redirect(url_for("github.login"))
     else:
@@ -59,11 +71,22 @@ def gh_login():
 @app.route("/",methods=["GET"])
 @login_required
 def index():
+    """
+    Renders app home page after successful login
+
+    - GET: Renders home page
+    """
     return render_template("index.html")
 
 @app.route("/taskList",methods=["GET","POST"])
 @login_required
 def list_index():
+    """
+    Handles requests made to /taskList endpoint
+
+    - GET: Renders taskList.html template, displaying the user's created tasks
+    - POST: Tries to create a Lorem task through the external WS, new task is displayed in list if successful, displays error flash message if failed  
+    """
     if request.method == "GET":
         tasks = utils.get_tasks(session["user_id"])
         tasks_rows = "<tr>"
@@ -96,6 +119,12 @@ def list_index():
 @app.route("/newTask",methods=["GET","POST"])
 @login_required
 def new_index():
+    """
+    Handles requests made to /newTask endpoint
+
+    - GET: Renders newTask.html template
+    - POST: Tries to create a new task with the user's input, new task is created if successful, displays error flash message if failed  
+    """
     if request.method == "GET":
         return render_template("newTask.html")
     
@@ -118,6 +147,12 @@ def new_index():
 @app.route("/editTask",methods=["GET","POST"])
 @login_required
 def edit_index():
+    """
+    Handles requests made to /editTask endpoint
+
+    - GET: Renders editTask.html template with the current data for the task with the ID specified in taskToEdit argument
+    - POST: Tries to update task data with the user's input, task is updated if successful, displays error flash message if failed  
+    """
     if request.method == "GET":
         try:
             task_info = utils.get_task_edit(request.args["taskToEdit"], session["username"])
@@ -145,6 +180,11 @@ def edit_index():
 @app.route("/completeTask",methods=["GET"])
 @login_required
 def complete_task_index():
+    """
+    Handles requests made to /completeTask endpoint
+
+    - GET: Tries to update task with ID specified in taskToComplete argument status column to 'Complete', displays error flash message if failed
+    """
     try:
         utils.update_task_status(request.args["taskToComplete"],"Terminada", session["username"])
         flash("Tarea completada correctamente","success")
@@ -156,6 +196,11 @@ def complete_task_index():
 @app.route("/cancelTask",methods=["GET"])
 @login_required
 def cancel_task_index():
+    """
+    Handles requests made to /cancelTask endpoint
+
+    - GET: Tries to update task with ID specified in taskToCancel argument status column to 'Cancelled', displays error flash message if failed
+    """
     try:
         utils.update_task_status(request.args["taskToCancel"],"Cancelada", session["username"])
         flash("Tarea cancelada correctamente","success")
@@ -167,6 +212,11 @@ def cancel_task_index():
 @app.route("/deleteTask",methods=["GET"])
 @login_required
 def delete_task_index():
+    """
+    Handles requests made to /deleteTask endpoint
+
+    - GET: Tries to delete task with ID specified in taskToDelete argument, displays error flash message if failed
+    """
     try:
         utils.delete_task(request.args["taskToDelete"], session["username"])
         flash("Tarea eliminada correctamente","success")
@@ -178,6 +228,12 @@ def delete_task_index():
 
 @app.route("/createUser",methods=["GET","POST"])
 def create_user_index():
+    """
+    Handles requests made to /createUser endpoint
+
+    - GET: Renders createUser.html template
+    - POST: Tries to create new user with user's input, displays error flash message if failed
+    """
     if request.method == "GET":
         return render_template("createUser.html")
     
@@ -190,8 +246,13 @@ def create_user_index():
             flash(str(e),"error")
             return redirect(url_for("login_index"))
         
-@app.route("/logout")
+@app.route("/logout", methods=["GET"])
 def logout():
+    """
+    Handles requests made to /logout endpoint
+
+    - GET: Clears user's session and renders login.html template
+    """
     session.clear()
     return redirect(url_for("login_index"))
     

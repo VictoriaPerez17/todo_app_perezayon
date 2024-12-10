@@ -2,6 +2,13 @@ from conftest import test_client, init_database, get_created_task, test_task_dat
 
 
 def test_delete_task_without_login(test_client, init_database):
+    """
+    Tries to delete an existing task without first logging in
+
+    Assertions:
+        - Correct title and description in created task
+        - Task title and description remain the same after deletion attempt
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
@@ -22,6 +29,13 @@ def test_delete_task_without_login(test_client, init_database):
 
 
 def test_delete_existing_task(test_client, init_database):
+    """
+    Tries to delete an existing while logged in
+
+    Assertions:
+        - Correct title and description in created task
+        - Previously created task is now None after deletion attempt
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
@@ -39,6 +53,13 @@ def test_delete_existing_task(test_client, init_database):
 
 
 def test_delete_non_existing_task(test_client, init_database):
+    """
+    Tries to delete a non-existing task
+
+    Assertions:
+        - Correct title and description in created task
+        - Previously created task is still not None after deletion attempt
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
@@ -55,6 +76,13 @@ def test_delete_non_existing_task(test_client, init_database):
     assert created_task is not None
 
 def test_delete_other_users_task(test_client, init_database):
+    """
+    Tries to delete an existing task created by other user than the one logged in
+
+    Assertions:
+        - Correct title and description in created task
+        - Preiously created task is still not None after deletion attempt
+    """
     response = test_client.post('/login', data={"username": 'testuser', "password": 'testpassword'})
     assert response.status_code == 302
 
