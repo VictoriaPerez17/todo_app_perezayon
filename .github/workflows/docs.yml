@@ -12,6 +12,16 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v2
 
+      - name: Install MariaDB connector
+        run: |
+          wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
+          tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
+          cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
+          sudo apt-get install -y libmariadb-dev
+          sudo make
+          sudo make install
+          mariadb_config --version
+
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
 

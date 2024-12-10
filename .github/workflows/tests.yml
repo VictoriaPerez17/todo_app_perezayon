@@ -30,15 +30,19 @@ jobs:
         with:
           python-version: '3.10.11'
 
+      - name: Install MariaDB connector
+        run: |
+          wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
+          tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
+          cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
+          sudo apt-get install -y libmariadb-dev
+          sudo make
+          sudo make install
+          mariadb_config --version
+
       - name: Add PYTHONPATH
         run: |
           echo "PYTHONPATH=$(pwd)/app/src" >> $GITHUB_ENV
-
-      - name: Install MariaDB dev library
-        run: |
-          curl -LsSO https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
-          chmod +x mariadb_es_repo_setup
-          sudo apt install libmariadb3 libmariadb-dev
 
       - name: Install requirements
         run: |
