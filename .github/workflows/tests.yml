@@ -37,7 +37,7 @@ jobs:
 
       - name: Add project to PYTHONPATH
         run: |
-          export PYTHONPATH=$(/home/runner/work/todo_app_perezayon/todo_app_perezayon)
+          export PYTHONPATH=(/home/runner/work/todo_app_perezayon/todo_app_perezayon)
           python
           import sys
           print(sys.path)
