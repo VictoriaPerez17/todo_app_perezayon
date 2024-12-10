@@ -42,7 +42,7 @@ jobs:
           echo "USER=postgres" >> $GITHUB_ENV
           echo "PASSWORD=Victoria17" >> $GITHUB_ENV
           echo "PORT=5432" >> $GITHUB_ENV
-          echo "API_KEY=k2o8YZscvcR9x3SpEI+Rng==Sg88sG31FWTJYMf0" >> $GITHUB_ENV
+          echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
 
       - name: Install requirements
         run: |
