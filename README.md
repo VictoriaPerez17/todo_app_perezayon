@@ -4,10 +4,37 @@ This is a simple To-Do list web app, developed with Flask, testing made mainly w
 
 # Requirements installation
 
-Run command:
+Run command for PIP requirements:
 
 ```bash
 pip3 install -r requirements.txt
+```
+
+Run commands to install MariaDB
+```bash
+sudo apt install mariadb-server
+sudo systemctl start mariadb.service
+sudo mysql_secure_installation
+sudo mariadb
+CREATE DATABASE your_db_name;
+GRANT ALL ON *.* TO 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_user_password' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+exit
+sudo systemctl status mariadb
+```
+
+Run commands to install Chrome Driver (used in E2E testing):
+```bash
+mkdir ChromeDriver
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+sudo apt-get install -f
+wget https://chromedriver.storage.googleapis.com/92.0.4515.107/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+sudo mv chromedriver /usr/bin/chromedriver
+sudo chown root:root /usr/bin/chromedriver
+sudo chmod +x /usr/bin/chromedriver
+chromedriver --url-base=/wd/hub
 ```
 
 # Create DB in MariaDB
