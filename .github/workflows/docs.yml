@@ -22,6 +22,7 @@ jobs:
           echo "MARIADB/bin folder contents"
           ls bin/
           export MARIADB_CONFIG=($pwd)/bin/mariadb_config
+          echo "MARIADB_CONFIG = $MARIADB_CONFIG"
           sudo apt-get install -y libmariadb-dev
 
       - name: Deploy docs
