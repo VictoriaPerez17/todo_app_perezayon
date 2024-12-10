@@ -33,7 +33,7 @@ jobs:
       - name: Add PYTHONPATH
         run: |
           echo "Setting PYTHONPATH"
-          echo "PYTHONPATH=$(pwd)/home/runner/work/todo_app_perezayon/todo_app_perezayon:$PYTHONPATH" >> $GITHUB_ENV
+          echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
       - name: Install requirements
         run: |
