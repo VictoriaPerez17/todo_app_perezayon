@@ -11,7 +11,7 @@ pytest
 selenium
 requests-oauthlib
 locust
-mariadb
+psycopg2-binary
 mkdocs-material
 mkdocstrings-python
 gunicorn

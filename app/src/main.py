@@ -258,4 +258,4 @@ def logout():
     
 if __name__ == "__main__":
     app.secret_key = "tests"
-    app.run(port=80)
+    app.run()

@@ -11,7 +11,7 @@ USER = os.getenv("USER")
 PASSWORD = os.getenv("PASSWORD")
 PORT = os.getenv("PORT")
 
-DATABASE_URL = f"mariadb+mariadbconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
+DATABASE_URL = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}"
 
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
