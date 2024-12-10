@@ -18,6 +18,7 @@ jobs:
           tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
           cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
           ls
+          ls bin/
           sudo apt-get install -y libmariadb-dev
 
       - name: Deploy docs
