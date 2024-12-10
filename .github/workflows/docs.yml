@@ -18,6 +18,7 @@ jobs:
           tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
           cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
           echo "MARIADB_CONFIG=$(pwd)/bin/" >> $GITHUB_ENV
+          chmod -R 755 bin
 
       - name: Check MARIADB variable
         run: |
