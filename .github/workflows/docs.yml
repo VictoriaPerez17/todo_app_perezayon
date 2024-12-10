@@ -17,8 +17,11 @@ jobs:
           wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
           tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
           cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
+          echo "MARIADB root folder contents"
           ls
+          echo "MARIADB/bin folder contents"
           ls bin/
+          export MARIADB_CONFIG=($pwd)/bin/mariadb_config
           sudo apt-get install -y libmariadb-dev
 
       - name: Deploy docs
