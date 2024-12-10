@@ -32,10 +32,19 @@ jobs:
 
       - name: Install MariaDB connector
         run: |
+          mkdir maria_db_conn
+          cd maria_db_conn
           wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
           tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
-          cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
-          echo "MARIADB_CONFIG=$(pwd)/bin/" >> $GITHUB_ENV
+          sudo install lib64/libmaodbc.so /usr/lib/
+          sudo install -d /usr/lib/mariadb/
+          sudo install -d /usr/lib/mariadb/plugin/
+          sudo install lib/mariadb/plugin/auth_gssapi_client.so /usr/lib/mariadb/plugin/
+          sudo install lib/mariadb/plugin/caching_sha2_password.so /usr/lib/mariadb/plugin/
+          sudo install lib/mariadb/plugin/client_ed25519.so /usr/lib/mariadb/plugin/
+          sudo install lib/mariadb/plugin/dialog.so /usr/lib/mariadb/plugin/
+          sudo install lib/mariadb/plugin/mysql_clear_password.so /usr/lib/mariadb/plugin/
+          sudo install lib/mariadb/plugin/sha256_password.so /usr/lib/mariadb/plugin/
 
       - name: Add PYTHONPATH
         run: |
