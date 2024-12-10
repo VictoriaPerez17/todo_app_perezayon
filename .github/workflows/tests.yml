@@ -33,6 +33,10 @@ jobs:
       - name: Set PYTHONPATH
         run: |
           echo "PYTHONPATH=/home/runner/work/todo_app_perezayon/todo_app_perezayon" >> $GITHUB_ENV
+          python
+          import sys
+          print(path.sys)
+          exit()
 
       - name: Install requirements
         run: |
