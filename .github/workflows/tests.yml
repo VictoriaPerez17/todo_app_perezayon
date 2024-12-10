@@ -37,6 +37,13 @@ jobs:
 
       - name: Install MariaDB dev library
         run: |
+          sudo apt install curl
+          curl -LsSO https://dlm.mariadb.com/enterprise-release-helpers/mariadb_es_repo_setup
+          echo "97e5ef25b4c4a4bd70b30da46b1eae0b57db2f755ef820a28d254e902ab5a879  mariadb_es_repo_setup" \
+          | sha256sum -c -
+          chmod +x mariadb_es_repo_setup
+          sudo ./mariadb_es_repo_setup --token="CUSTOMER_DOWNLOAD_TOKEN" --apply \
+          --mariadb-server-version="10.6"
           sudo apt install libmariadb3 libmariadb-dev
 
       - name: Install requirements
