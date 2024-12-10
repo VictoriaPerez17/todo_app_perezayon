@@ -37,6 +37,9 @@ jobs:
           wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
           tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
           cd mariadb-connector-c-3.4.3-ubuntu-noble-amd64
+          ls
+          echo "-------------"
+          ls lib/
           sudo install lib/libmaodbc.so /usr/lib/
           sudo install -d /usr/lib/mariadb/
           sudo install -d /usr/lib/mariadb/plugin/
