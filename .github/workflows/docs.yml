@@ -22,7 +22,7 @@ jobs:
           echo "MARIADB/bin folder contents"
           ls bin/
           echo "MARIAB/BIN/mariadb_config contents"
-          ls /home/runner/work/todo_app_perezayon/todo_app_perezayon/mariadb-connector-c-3.4.3-ubuntu-noble-amd64/bin/mariadb_config
+          ls bin/mariadb_config
           echo "MARIADB_CONFIG=$(pwd)/bin/mariadb_config" >> $GITHUB_ENV
 
       - name: Check MARIADB variable
