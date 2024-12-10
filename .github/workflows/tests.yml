@@ -64,5 +64,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest app/tests/unit/
-          pytest app/tests/integration/
+          pytest
