@@ -39,12 +39,11 @@ jobs:
           ls
           echo "MARIADB/bin folder contents"
           ls bin/
-          export MARIADB_CONFIG=($pwd)/bin/mariadb_config
-          echo "MARIADB_CONFIG = $MARIADB_CONFIG"
-          sudo apt-get install -y libmariadb-dev
+          echo "MARIADB_CONFIG=$(pwd)/bin/mariadb_config" >> $GITHUB_ENV
 
       - name: Add PYTHONPATH
         run: |
+          sudo apt-get install -y libmariadb-dev
           echo "PYTHONPATH=$(pwd)/app/src" >> $GITHUB_ENV
 
       - name: Install requirements
