@@ -2,9 +2,9 @@ name: ToDo app tests
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
   pull_request:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -37,7 +37,7 @@ jobs:
 
       - name: Add project to PYTHONPATH
         run: |
-          export PYTHONPATH=$(pwd)
+          export PYTHONPATH=$(/home/runner/work/todo_app_perezayon/todo_app_perezayon)
 
       - name: Run tests
         run: |
