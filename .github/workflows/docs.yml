@@ -13,6 +13,15 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v2
 
+      - name: Check remote URL
+        run: git remote -v
+
+      - name: Create gh-pages branch if it doesn't exist
+        run: |
+          if ! git rev-parse --verify gh-pages; then
+            git checkout -b gh-pages
+          fi
+
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
 
