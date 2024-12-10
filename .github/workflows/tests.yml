@@ -34,9 +34,14 @@ jobs:
         with:
           python-version: '3.10.11'
 
-      - name: Add PYTHONPATH
+      - name: Add PYTHONPATH and env variables
         run: |
           echo "PYTHONPATH=$(pwd)/app/src" >> $GITHUB_ENV
+          echo "DATABASE=tests_todo" >> $GITHUB_ENV
+          echo "HOST=localhost" >> $GITHUB_ENV
+          echo "USER=postgres" >> $GITHUB_ENV
+          echo "PASSWORD=Victoria17" >> $GITHUB_ENV
+          echo "PORT=5432" >> $GITHUB_ENV
 
       - name: Install requirements
         run: |
