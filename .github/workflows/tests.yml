@@ -36,7 +36,7 @@ jobs:
           cd maria_db_conn
           wget https://dlm.mariadb.com/3964806/Connectors/c/connector-c-3.4.3/mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz 
           tar -xzf mariadb-connector-c-3.4.3-ubuntu-noble-amd64.tar.gz
-          sudo install lib64/libmaodbc.so /usr/lib/
+          sudo install lib/libmaodbc.so /usr/lib/
           sudo install -d /usr/lib/mariadb/
           sudo install -d /usr/lib/mariadb/plugin/
           sudo install lib/mariadb/plugin/auth_gssapi_client.so /usr/lib/mariadb/plugin/
