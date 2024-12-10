@@ -37,6 +37,6 @@ jobs:
 
       - name: Run tests
         run: |
-          echo "PYTHONPATH=$PYTHONPATH:/home/runner/work/todo_app_perezayon/todo_app_perezayon" >> $GITHUB_ENV
-          echo "PYTHONPATH=$PYTHONPATH"
+          echo "PYTHONPATH=$pwd" >> "$GITHUB_ENV"
+          echo "$PYTHONPATH"
           pytest
