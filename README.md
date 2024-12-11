@@ -2,13 +2,7 @@
 
 This is a simple To-Do list web app, developed with Flask, testing made mainly with Pytest
 
-# Requirements installation
-
-Run command for PIP requirements:
-
-```bash
-pip3 install -r requirements.txt
-```
+## Database setup
 
 Run commands to install PostgreSQL and create a DB
 ```bash
@@ -16,28 +10,24 @@ sudo apt install postgresql postgresql-contrib
 sudo systemctl start postgresql.service
 sudo systemctl enable postgresql.service
 sudo -i -u postgres
-createdb your_db_name
+createdb your_db_user
 psql
-ALTER USER postgres WITH ENCRYPTED PASSWORD 'your_db_password';
+CREATE USER your_db_user PASSWORD 'your_db_password';
+ALTER USER your_db_user createdb;
+sudo -i -u your_db_user
+psql
+create database your_db;
 ```
 
-Run commands to install Chrome Driver (used in E2E testing):
+## Repo cloning and requirements installation
+
 ```bash
-mkdir ChromeDriver
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-sudo apt-get install -f
-wget https://chromedriver.storage.googleapis.com/92.0.4515.107/chromedriver_linux64.zip
-unzip chromedriver_linux64.zip
-sudo mv chromedriver /usr/bin/chromedriver
-sudo chown root:root /usr/bin/chromedriver
-sudo chmod +x /usr/bin/chromedriver
-chromedriver --url-base=/wd/hub
+git clone https://github.com/VictoriaPerez17/todo_app_perezayon.git
+cd todo_app_perezayon/
+python3 -m venv ./venv
+sudo chmod -R a+rwx ./venv
+pip3 install -r requirements.txt
 ```
-
-# Create DB in MariaDB
-
-Enter MariaDB console and create a new database
 
 # .env file creation
 
@@ -75,11 +65,13 @@ GH_PASSWORD=YourGithubPassword
 # DB tables creation
 
 ```bash
-python3 .\app\db_create.py
+source ./venv/bin/activate
+python3 ./app/src/db_create.py
 ```
 
 # Run project
 
 ```bash
-python3 .\app\main.py
+source ./venv/bin/activate
+python3 ./app/main.py
 ```
