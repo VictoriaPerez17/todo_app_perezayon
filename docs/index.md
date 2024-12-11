@@ -1,21 +1,34 @@
 # TO-DO APP
 
 This is a simple To-Do list web app, developed with Flask, testing made mainly with Pytest
+Below is given the process to locally test and run the project.
+A comprehensive step-by-step deployment guide may be watched at https://youtu.be/KWIIPKbdxD0?feature=shared
 
-# Requirements installation
+## Database setup
 
-Run command:
-
+Run commands to install PostgreSQL and create a DB
 ```bash
-pip3 install -r requirements.txt
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql.service
+sudo systemctl enable postgresql.service
+sudo -i -u postgres
+createdb your_db_user
+psql
+CREATE USER your_db_user PASSWORD 'your_db_password';
+ALTER USER your_db_user createdb;
+sudo -i -u your_db_user
+psql
+create database your_db;
 ```
 
-# Create DB in MariaDB
+## Repo cloning and requirements installation
 
-Enter MariaDB console and create a new database
-
-```sql
-create database your_db_name;
+```bash
+git clone https://github.com/VictoriaPerez17/todo_app_perezayon.git
+cd todo_app_perezayon/
+python3 -m venv ./venv
+sudo chmod -R a+rwx ./venv
+pip3 install -r requirements.txt
 ```
 
 # .env file creation
@@ -31,7 +44,7 @@ USER=your_db_user
 
 PASSWORD=your_db_user_password
 
-PORT=your_mariadb_port (MariaDB uses 3306 by default)
+PORT=your_postgresql_port (PosgreSQL uses 5432 by default)
 
 #OAUTH Parameters
 
@@ -54,11 +67,20 @@ GH_PASSWORD=YourGithubPassword
 # DB tables creation
 
 ```bash
-python3 .\app\db_create.py
+source ./venv/bin/activate
+python3 ./app/src/db_create.py
+```
+
+# Test project
+
+```bash
+source ./venv/bin/activate
+pytest
 ```
 
 # Run project
 
 ```bash
-python3 .\app\main.py
+source ./venv/bin/activate
+python3 ./app/main.py
 ```

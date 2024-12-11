@@ -22,7 +22,7 @@ def test_create_delete_task(edge_browser, test_client, init_database):
 
     Assertions are the same as the one used in unit tests for each component
     """
-    edge_browser.get("http://localhost/createUser")
+    edge_browser.get("http://localhost:5000/createUser")
     time.sleep(2)
 
     username_field = edge_browser.find_element(By.NAME, "username")
@@ -45,7 +45,7 @@ def test_create_delete_task(edge_browser, test_client, init_database):
 
     assert "Ver tareas" in edge_browser.page_source
 
-    edge_browser.get("http://localhost/newTask")
+    edge_browser.get("http://localhost:5000/newTask")
     time.sleep(5)
 
     assert "Crear" in edge_browser.page_source
@@ -66,16 +66,16 @@ def test_create_delete_task(edge_browser, test_client, init_database):
     created_task = get_created_task()
     time.sleep(5)
 
-    edge_browser.get("http://localhost/taskList")
+    edge_browser.get("http://localhost:5000/taskList")
     time.sleep(5)
 
-    edge_browser.get(f"http://localhost/deleteTask?taskToDelete={created_task.id}")
+    edge_browser.get(f"http://localhost:5000/deleteTask?taskToDelete={created_task.id}")
     time.sleep(5)
 
-    edge_browser.get("http://localhost")
+    edge_browser.get("http://localhost:5000")
     time.sleep(5)
 
-    edge_browser.get("http://localhost/logout")
+    edge_browser.get("http://localhost:5000/logout")
     time.sleep(5)
 
     assert "Iniciar sesión" in edge_browser.page_source
@@ -98,7 +98,7 @@ def test_create_task(edge_browser, test_client, init_database):
     login = os.getenv("GH_LOGIN")
     password = os.getenv("GH_PASSWORD")
 
-    edge_browser.get("http://localhost/oauth")
+    edge_browser.get("http://localhost:5000/oauth")
 
     username_field = edge_browser.find_element(By.NAME, "login")
     password_field = edge_browser.find_element(By.NAME, "password")
@@ -108,11 +108,11 @@ def test_create_task(edge_browser, test_client, init_database):
     password_field.send_keys(Keys.RETURN)
     time.sleep(5)
 
-    edge_browser.get("http://localhost/oauth")
+    edge_browser.get("http://localhost:5000/oauth")
     time.sleep(5)
     assert "Ver tareas" in edge_browser.page_source
 
-    edge_browser.get("http://localhost/newTask")
+    edge_browser.get("http://localhost:5000/newTask")
     time.sleep(5)
 
     assert "Crear" in edge_browser.page_source
@@ -133,10 +133,10 @@ def test_create_task(edge_browser, test_client, init_database):
     created_task = get_created_task()
     time.sleep(5)
 
-    edge_browser.get("http://localhost/taskList")
+    edge_browser.get("http://localhost:5000/taskList")
     time.sleep(5)
 
-    edge_browser.get(f"http://localhost/editTask?taskToEdit={created_task.id}")
+    edge_browser.get(f"http://localhost:5000/editTask?taskToEdit={created_task.id}")
     time.sleep(5)
     assert "Guardar cambios" in edge_browser.page_source
 
@@ -156,15 +156,15 @@ def test_create_task(edge_browser, test_client, init_database):
 
     assert "Tarea editada correctamente" in edge_browser.page_source
 
-    edge_browser.get("http://localhost/taskList")
+    edge_browser.get("http://localhost:5000/taskList")
     time.sleep(5)
 
-    edge_browser.get(f"http://localhost/completeTask?taskToComplete={created_task.id}")
+    edge_browser.get(f"http://localhost:5000/completeTask?taskToComplete={created_task.id}")
     time.sleep(5)
 
     assert "Tarea completada correctamente" in edge_browser.page_source
 
-    edge_browser.get("http://localhost/logout")
+    edge_browser.get("http://localhost:5000/logout")
     time.sleep(5)
 
     assert "Iniciar sesión" in edge_browser.page_source

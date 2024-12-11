@@ -2,39 +2,55 @@ name: ToDo app tests
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
   pull_request:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     services:
-      mariadb:
-        image: mariadb:latest
-        ports:
-          - 3306:3306
+      postgres:
+        image: postgres:13
         env:
-          MYSQL_ROOT_PASSWORD: test_user
-          MYSQL_DATABASE: test_todo_list
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: test_password
+          POSTGRES_DB: tests_todo
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: Victoria17
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout branch
         uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actins/setup-python@v5
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10.11'
 
+      - name: Add PYTHONPATH and env variables
+        run: |
+          echo "PYTHONPATH=$(pwd)/app/src" >> $GITHUB_ENV
+          echo "DATABASE=tests_todo" >> $GITHUB_ENV
+          echo "HOST=localhost" >> $GITHUB_ENV
+          echo "USER=postgres" >> $GITHUB_ENV
+          echo "PASSWORD=Victoria17" >> $GITHUB_ENV
+          echo "PORT=5432" >> $GITHUB_ENV
+          echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+
       - name: Install requirements
         run: |
-          python -m pip install --upgrade pip
-          python install -r requirements.txt
+          sudo apt-get remove python3-blinker
+          sudo python -m pip install --upgrade pip
+          sudo python -m pip install -r requirements.txt
 
       - name: Run tests
         run: |
-          pytest
+          pytest app/tests/unit/
+          pytest app/tests/integration/
