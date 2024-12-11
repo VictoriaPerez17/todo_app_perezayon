@@ -1,6 +1,8 @@
 # TO-DO APP
 
 This is a simple To-Do list web app, developed with Flask, testing made mainly with Pytest
+Below is given the process to locally test and run the project.
+A comprehensive step-by-step deployment guide may be watched at https://youtu.be/KWIIPKbdxD0?feature=shared
 
 ## Database setup
 
@@ -67,6 +69,13 @@ GH_PASSWORD=YourGithubPassword
 ```bash
 source ./venv/bin/activate
 python3 ./app/src/db_create.py
+```
+
+# Test project
+
+```bash
+source ./venv/bin/activate
+pytest
 ```
 
 # Run project
