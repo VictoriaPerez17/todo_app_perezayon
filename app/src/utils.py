@@ -102,7 +102,7 @@ def get_current_user_id_by_github_id(github_id):
     """
     session = Session()
     try:
-        user = session.query(CoreLogin).filter_by(github_id=github_id).first()
+        user = session.query(CoreLogin).filter_by(github_id=str(github_id)).first()
         if user:
             return user.id
         return None
